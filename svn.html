@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+</head>
+<body>
+  <p>正在跳转到 SVN...</p>
+
+  <script>
+    fetch('./config.json?t=' + Date.now())
+      .then(res => res.json())
+      .then(cfg => {
+        const target = `http://${cfg.ip}:7766/svn/MallFireSafety`;
+        window.location.href = target;
+      })
+      .catch(() => {
+        document.body.innerHTML = "获取服务器IP失败";
+      });
+  </script>
+</body>
+</html>
