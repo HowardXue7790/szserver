@@ -1,0 +1,28 @@
+name: Update Server IP
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # 每30分钟更新一次
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get IP
+        run: |
+          IP=$(curl -s https://xrsztech.com/getserverip/)
+          echo "IP=$IP"
+          echo "{\"ip\":\"$IP\"}" > config.json
+
+      - name: Commit & Push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add config.json
+          git commit -m "update ip" || echo "no change"
+          git push
